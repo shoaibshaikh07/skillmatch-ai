@@ -15,6 +15,12 @@ export const auth = betterAuth({
   },
   advanced: {
     cookiePrefix: "skillmatch",
+    cookieOptions: {
+      secure: true,
+      sameSite: "none",
+      domain: process.env.COOKIE_DOMAIN,
+      path: "/",
+    },
   },
   secret: process.env.BETTER_AUTH_SECRET,
   trustedOrigins: [process.env.CLIENT_BASE_URL as string],

@@ -13,7 +13,9 @@ app.use(
     origin: process.env.CLIENT_BASE_URL,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Set-Cookie"],
+    exposedHeaders: ["Set-Cookie"],
+    maxAge: 86400, // 24 hours
   })
 );
 
