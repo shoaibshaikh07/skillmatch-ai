@@ -524,9 +524,7 @@ The project follows a monorepo structure using Turborepo:
 skillmatch-ai/
 ├── apps/
 │   ├── client/          # Frontend application
-│   └── server/          # Backend API server
-├── packages/
-│   ├── shared-stuff/    # Shared types and schemas
+│   └── backend/          # Backend API server
 └── package.json         # Root package.json
 ```
 
@@ -561,12 +559,20 @@ We will deploy our server to [Render](https://render.com) using [Docker](https:/
 
 1. Create a Render account (if you don't have one) and connect your GitHub account.
 2. Create new `Web Service` and select `Docker` as the Language.
-3. Enter `apps/server` as the `Root Directory`.
+3. Enter `apps/backend` as the `Root Directory`.
 4. Set all the environment variables in the `Environment Variables` section.
 5. Click `Deploy Web Service`.
 6. Once the deployment is complete, you can access your deployed server at `https://<your-app-name>.onrender.com`.
 
+### Client
+We will deploy our client to [Vercel](https://vercel.com), follow the steps below:
 
+1. Create a Vercel account (if you don't have one) and connect your GitHub account.
+2. Create a new project and select `Next.js` as the Framework.
+3. Enter `apps/client` as the `Root Directory`.
+4. Set all the environment variables in the `Environment Variables` section.
+5. Click `Deploy`.
+6. Once the deployment is complete, you can access your deployed client at `https://<your-app-name>.vercel.app`.
 
 ## 📝 License
 

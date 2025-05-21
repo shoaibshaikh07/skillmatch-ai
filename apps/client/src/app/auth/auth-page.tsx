@@ -23,11 +23,11 @@ export default function AuthPage(): React.JSX.Element {
 
       if (session.data?.session) {
         const onboardingStatus = await api.get("/user/onboarding");
-        if (onboardingStatus.data.success && onboardingStatus.data.completed) {
-          router.push("/jobs");
-        } else {
+        if (!onboardingStatus.data.completed) {
           router.push("/onboarding");
+          return;
         }
+        router.push("/jobs");
       }
     };
 

@@ -19,6 +19,8 @@ import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import type { Profile } from "@/lib/types/user";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LogOut } from "lucide-react";
+import { AlertDialogLogout } from "./logout-dialog";
 
 export default function ProfilePage(): React.JSX.Element {
   const form = useForm<OnboardingSchema>({
@@ -194,6 +196,7 @@ export default function ProfilePage(): React.JSX.Element {
               </Button>
             </div>
           </form>
+          <AlertDialogLogout />
         </Form>
       )}
     </section>
