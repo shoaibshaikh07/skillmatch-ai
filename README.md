@@ -80,9 +80,9 @@ Note: The client app runs locally for better development experience with hot rel
 
 <!-- Create a `.env` file in the root directory with the following variables: -->
 
-##### Server
+##### Backend
 
-Create a `.env` file in the `/apps/server` directory with the following variables
+Create a `.env` file in the `/apps/backend` directory with the following variables
 
 ```env
 DATABASE_URL=your_database_url
