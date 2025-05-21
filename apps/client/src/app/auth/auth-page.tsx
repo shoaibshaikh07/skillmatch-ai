@@ -32,7 +32,7 @@ export default function AuthPage(): React.JSX.Element {
     };
 
     checkSteps();
-  }, []);
+  }, [router]);
 
   return (
     <section className="mt-16 flex flex-col gap-4 p-4">
