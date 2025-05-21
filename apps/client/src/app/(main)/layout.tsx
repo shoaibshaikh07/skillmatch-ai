@@ -1,5 +1,6 @@
 import TanstackQueryProvider from "@/components/provider/tanstack-query";
 import Navigation from "./_components/navigation";
+import AuthorizationWrapper from "./auth-wrapper";
 
 export default function Layout({
   children,
@@ -8,10 +9,10 @@ export default function Layout({
 }): React.JSX.Element {
   return (
     <TanstackQueryProvider>
-      <main>
+      <AuthorizationWrapper>
         {children}
         <Navigation />
-      </main>
+      </AuthorizationWrapper>
     </TanstackQueryProvider>
   );
 }

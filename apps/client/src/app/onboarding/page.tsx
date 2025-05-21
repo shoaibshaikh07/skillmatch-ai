@@ -32,7 +32,6 @@ export default function Onboarding(): React.JSX.Element {
   });
 
   const handleSubmit = async (data: OnboardingSchema): Promise<void> => {
-    console.log(data);
     const response = await api.post("/user/onboarding", data);
 
     if (response.data.error) {
