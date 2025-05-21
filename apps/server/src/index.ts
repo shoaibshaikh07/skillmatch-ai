@@ -10,7 +10,7 @@ const port = process.env.PORT || 3001;
 // Enable CORS for all routes
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_BASE_URL,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
