@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/utils";
 
 export default function AuthTabSignIn(): React.JSX.Element {
   const router = useRouter();
