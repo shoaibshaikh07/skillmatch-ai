@@ -19,6 +19,10 @@ app.all("/api/auth/{*any}", toNodeHandler(auth));
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("what's up buddy?");
+});
+
 app.use("/api", routes);
 
 app.listen(port, () => {
