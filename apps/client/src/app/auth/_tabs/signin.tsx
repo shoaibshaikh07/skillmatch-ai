@@ -1,5 +1,7 @@
+"use client";
+
 import { useForm } from "react-hook-form";
-import { type SignInSchema, signInSchema } from "@repo/shared-types";
+import { type SignInSchema, signInSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -25,6 +27,7 @@ export default function AuthTabSignIn(): React.JSX.Element {
       {
         email: data.email,
         password: data.password,
+        rememberMe: true,
       },
       {
         onError: (error): void => {
@@ -32,12 +35,11 @@ export default function AuthTabSignIn(): React.JSX.Element {
           toast.error(error.error.message);
         },
         onSuccess: async (): Promise<void> => {
+          toast.success("Successfully Logged In, Redirecting...");
           const response = await api.get("/user/onboarding");
           if (response.data.error) {
             toast.error("Error - Onboarding Failed");
           }
-
-          console.log(response.data.completed);
 
           if (!response.data.completed) {
             router.push("/onboarding");

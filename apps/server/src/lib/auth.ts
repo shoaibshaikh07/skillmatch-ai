@@ -16,5 +16,6 @@ export const auth = betterAuth({
   advanced: {
     cookiePrefix: "skillmatch",
   },
+  baseURL: process.env.CLIENT_BASE_URL,
   plugins: [admin()],
 });

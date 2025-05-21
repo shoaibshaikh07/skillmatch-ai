@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import debounce from "lodash.debounce";
 import { Input } from "@/components/ui/input";
 import {
@@ -39,40 +39,53 @@ export default function LocationInput<T extends FieldValues>({
   const [results, setResults] = useState<City[]>([]);
   const [open, setOpen] = useState(false);
 
-  const fetchCities = async (search: string): Promise<void> => {
-    if (!search) {
-      setResults([]);
-      return;
-    }
+  const fetchCities = useCallback(
+    async (search: string): Promise<void> => {
+      if (!search) {
+        setResults([]);
+        return;
+      }
 
-    const res = await fetch(
-      `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${search}&limit=10&sort=-population`,
-      {
-        headers: {
-          "X-RapidAPI-Key": process.env.NEXT_PUBLIC_GEODB_API_KEY as string,
-          "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
+      const res = await fetch(
+        `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${search}&limit=10&sort=-population`,
+        {
+          headers: {
+            "X-RapidAPI-Key": process.env.NEXT_PUBLIC_GEODB_API_KEY as string,
+            "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
+          },
         },
-      },
-    );
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!data.data) {
-      return;
-    }
+      if (!data.data) {
+        return;
+      }
 
-    const cities = data.data.map((item: any) => ({
-      id: item.id,
-      city: item.city,
-      region: item.region,
-      country: item.country,
-    }));
+      const cities = data.data.map(
+        (item: {
+          id: string;
+          city: string;
+          region: string;
+          country: string;
+        }) => ({
+          id: item.id,
+          city: item.city,
+          region: item.region,
+          country: item.country,
+        }),
+      );
 
-    setResults(cities);
-    setOpen(true);
-  };
+      setResults(cities);
+      setOpen(true);
+    },
+    [setResults, setOpen],
+  );
 
-  const debouncedFetch = useCallback(debounce(fetchCities, 400), []);
+  const debouncedFetch = useMemo(
+    () => debounce(fetchCities, 400),
+    [fetchCities],
+  );
 
   return (
     <Controller

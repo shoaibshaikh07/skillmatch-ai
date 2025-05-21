@@ -3,7 +3,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Job } from "@/lib/types/job";
 import { api } from "@/lib/utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { type QueryObserverResult, useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { useState, useMemo } from "react";
 import {
@@ -16,7 +16,6 @@ import {
 import { Button } from "@/components/ui/button";
 import JobCard from "./job-card";
 import { Sparkle } from "lucide-react";
-import { toast } from "sonner";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 
 type SortOption = "relevant" | "newest" | "oldest";
@@ -33,17 +32,15 @@ export default function JobList(): React.JSX.Element {
     },
   });
 
-  const recommendJobsMutation = useMutation({
-    mutationKey: ["suggested-jobs"],
-    mutationFn: async (): Promise<{ jobs: Job[] }> => {
+  const recommendJobsQuery = useQuery({
+    queryKey: ["suggested-jobs"],
+    queryFn: async (): Promise<{ jobs: Job[] }> => {
       const response = await api.get("/jobs/suggest");
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // artifical delay to show the text animation
       return response.data as { jobs: Job[] };
     },
-    gcTime: 1000 * 60 * 1, // 1 minutes
-    onError: (error): void => {
-      toast.error(error.message);
-    },
+    enabled: false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const sortedAndFilteredJobs = useMemo((): Job[] => {
@@ -117,7 +114,9 @@ export default function JobList(): React.JSX.Element {
         <Button
           size="sm"
           type="button"
-          onClick={(): void => recommendJobsMutation.mutate()}
+          onClick={(): Promise<QueryObserverResult<{ jobs: Job[] }, Error>> =>
+            recommendJobsQuery.refetch()
+          }
           className="bg-gradient-to-r from-blue-500 to-indigo-500 font-semibold shadow-md"
         >
           <Sparkle className="mr-0.5 inline" />
@@ -125,13 +124,13 @@ export default function JobList(): React.JSX.Element {
         </Button>
       </div>
 
-      {recommendJobsMutation.isPending ? (
+      {recommendJobsQuery.isFetching ? (
         <TextShimmer className="text-center font-mono text-sm" duration={3}>
           Recommending jobs according to your profile...
         </TextShimmer>
       ) : (
-        recommendJobsMutation.data?.jobs &&
-        recommendJobsMutation.data.jobs.length > 0 && (
+        recommendJobsQuery.data?.jobs &&
+        recommendJobsQuery.data.jobs.length > 0 && (
           <div className="space-y-3 rounded-md bg-gradient-to-br from-blue-500 to-indigo-500 p-4">
             <div>
               <h2 className="font-semibold text-accent text-base">
@@ -142,7 +141,7 @@ export default function JobList(): React.JSX.Element {
               </p>
             </div>
             <div className="grid grid-cols-1 gap-2 space-y-2">
-              {recommendJobsMutation.data.jobs.map((job: Job) => (
+              {recommendJobsQuery.data.jobs.map((job: Job) => (
                 <JobCard key={job.id} job={job} />
               ))}
             </div>

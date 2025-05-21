@@ -4,7 +4,7 @@ import { fromNodeHeaders } from "better-auth/node";
 import db from "../db";
 import { profile, user } from "../db/schema";
 import { eq } from "drizzle-orm";
-import { onboardingSchema } from "@repo/shared-types";
+import { onboardingSchema } from "../schema/onboarding";
 
 const router = express.Router();
 

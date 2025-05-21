@@ -1,7 +1,10 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { type OnboardingSchema, onboardingSchema } from "@repo/shared-types";
+import {
+  type OnboardingSchema,
+  onboardingSchema,
+} from "@/lib/schema/onboarding";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Label } from "@radix-ui/react-label";
@@ -55,7 +58,7 @@ export default function Onboarding(): React.JSX.Element {
       }
     };
     checkOnboardingStatus();
-  }, []);
+  }, [router]);
 
   return (
     <section className="mx-auto mt-2 flex max-w-4xl flex-col gap-4 p-4">

@@ -1,7 +1,10 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { type OnboardingSchema, onboardingSchema } from "@repo/shared-types";
+import {
+  type OnboardingSchema,
+  onboardingSchema,
+} from "@/lib/schema/onboarding";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Label } from "@radix-ui/react-label";
@@ -38,7 +41,6 @@ export default function ProfilePage(): React.JSX.Element {
       }
 
       if (response.data.success && response.data.profile) {
-        console.log(response.data.profile);
         // convert the skills (array of strings) to an array of objects
         const skills = response.data.profile.skills.map((skill: unknown) => ({
           value: skill,

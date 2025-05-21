@@ -22,7 +22,7 @@ SkillMatch AI is an AI-Powered Job Match Platform that helps find jobs based on 
 
 ### Server/Backend
 
-- **Runtime**: [Node](https://nodejs.org/en) with [Bun](https://bun.sh/)
+- **Runtime**: [Node](https://nodejs.org/en) with [Bun Package Manager](https://bun.sh/)
 - **Framework**: [Express.js](https://expressjs.com) with TypeScript
 - **Database**: PostgreSQL with [Drizzle ORM](https://orm.drizzle.team/)
 - **Authentication**: [Better Auth](https://github.com/better-auth/better-auth)
@@ -35,7 +35,7 @@ SkillMatch AI is an AI-Powered Job Match Platform that helps find jobs based on 
 - **Package Manager**: Bun
 - **Monorepo**: Turborepo
 - **Type Checking**: TypeScript
-- **Formatting & Liniting**: Biome
+- **Formatting & Liniting**: Biome & Prettier
 - **Version Control**: Git
 
 ## 🚀 Quick Start

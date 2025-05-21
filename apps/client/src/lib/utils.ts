@@ -7,8 +7,6 @@ export function cn(...inputs: ClassValue[]): string {
 }
 
 export const api = axios.create({
-  baseURL:
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api` ||
-    "http://localhost:3001/api",
+  baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`,
   withCredentials: true,
 });
