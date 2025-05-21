@@ -6,5 +6,12 @@ export const authClient = createAuthClient({
   plugins: [adminClient()],
   fetchOptions: {
     credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  },
+  cookieOptions: {
+    path: "/",
+    sameSite: "lax",
   },
 });

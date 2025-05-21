@@ -22,23 +22,32 @@ export default function AuthTabSignIn(): React.JSX.Element {
   });
 
   const handleSubmit = async (data: SignInSchema): Promise<void> => {
-    await authClient.signIn.email(
-      {
-        email: data.email,
-        password: data.password,
-        rememberMe: true,
-      },
-      {
-        onError: (error): void => {
-          console.log(error);
-          toast.error(error.error.message);
+    try {
+      console.log("SignIn - Attempting login..."); // Debug log
+      const response = await authClient.signIn.email(
+        {
+          email: data.email,
+          password: data.password,
+          rememberMe: true,
         },
-        onSuccess: async (): Promise<void> => {
-          toast.success("Successfully Logged In, Redirecting...");
-          router.push("/jobs");
+        {
+          onError: (error): void => {
+            console.error("SignIn - Error:", error); // Debug log
+            toast.error(error.error.message);
+          },
+          onSuccess: async (response): Promise<void> => {
+            console.log("SignIn - Success response:", response); // Debug log
+            console.log("SignIn - Cookies after login:", document.cookie); // Debug log
+            toast.success("Successfully Logged In, Redirecting...");
+            router.push("/jobs");
+          },
         },
-      },
-    );
+      );
+      console.log("SignIn - Full response:", response); // Debug log
+    } catch (error) {
+      console.error("SignIn - Unexpected error:", error); // Debug log
+      toast.error("An unexpected error occurred");
+    }
   };
 
   return (
