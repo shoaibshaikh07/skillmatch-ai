@@ -1,4 +1,5 @@
 import express from "express";
+import type { Request, Response } from "express";
 import { auth } from "../lib/auth";
 import { fromNodeHeaders } from "better-auth/node";
 import db from "../db";
@@ -9,7 +10,7 @@ import { onboardingSchema } from "../schema/onboarding";
 const router = express.Router();
 
 // Returns the user's profile
-router.get("/profile", async (req, res) => {
+router.get("/profile", async (req: Request, res: Response) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
   });
@@ -49,7 +50,7 @@ router.get("/profile", async (req, res) => {
 });
 
 // Updates the user's profile
-router.post("/profile", async (req, res) => {
+router.post("/profile", async (req: Request, res: Response) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
   });
@@ -104,7 +105,7 @@ router.post("/profile", async (req, res) => {
 });
 
 // Returns the onboarding status of the user
-router.get("/onboarding", async (req, res) => {
+router.get("/onboarding", async (req: Request, res: Response) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
   });
@@ -142,7 +143,7 @@ router.get("/onboarding", async (req, res) => {
 });
 
 // Sets the user's profile details and onboarding status
-router.post("/onboarding", async (req, res) => {
+router.post("/onboarding", async (req: Request, res: Response) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
   });

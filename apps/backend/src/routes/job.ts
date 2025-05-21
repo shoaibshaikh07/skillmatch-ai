@@ -1,4 +1,5 @@
 import express from "express";
+import type { Request, Response } from "express";
 import { auth } from "../lib/auth";
 import { fromNodeHeaders } from "better-auth/node";
 import db from "../db";
@@ -9,7 +10,7 @@ import { voyageai } from "../lib/voyageai";
 const router = express.Router();
 
 // Returns a list of jobs
-router.get("/", async (req, res) => {
+router.get("/", async (req: Request, res: Response) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
   });
@@ -38,7 +39,7 @@ router.get("/", async (req, res) => {
 });
 
 // Returns a list of 3 suggested jobs based on the user's profile
-router.get("/suggest", async (req, res) => {
+router.get("/suggest", async (req: Request, res: Response) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
   });

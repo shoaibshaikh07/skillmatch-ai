@@ -5,22 +5,25 @@ WORKDIR /app
 COPY package.json .
 COPY turbo.json .
 
-COPY apps/server ./apps/server
+COPY apps/backend ./apps/backend
 
 RUN bun install --frozen-lockfile
 
-RUN cd apps/server && bun run build
+RUN cd apps/backend && bun run build
 
 FROM oven/bun:1-slim AS runner
 
 WORKDIR /app
 
-COPY --from=builder /app/apps/server/package.json ./package.json
-COPY --from=builder /app/apps/server/dist ./dist
-COPY --from=builder /app/apps/server/node_modules ./node_modules
+COPY --from=builder /app/apps/backend/package.json ./package.json
+COPY --from=builder /app/apps/backend/dist ./dist
 
-COPY apps/server/.env* ./
+# Install production dependencies only
+RUN bun install --production --frozen-lockfile
 
-EXPOSE 3001
+COPY apps/backend/.env* ./
+ENV PORT=3002
+
+EXPOSE 3002
 
 CMD ["bun", "run", "dist/index.js"]
