@@ -36,16 +36,6 @@ export default function AuthTabSignIn(): React.JSX.Element {
         },
         onSuccess: async (): Promise<void> => {
           toast.success("Successfully Logged In, Redirecting...");
-          const response = await api.get("/user/onboarding");
-          if (response.data.error) {
-            toast.error("Error - Onboarding Failed");
-          }
-
-          if (!response.data.completed) {
-            router.push("/onboarding");
-            return;
-          }
-
           router.push("/jobs");
         },
       },
