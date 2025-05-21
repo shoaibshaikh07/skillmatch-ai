@@ -1,0 +1,71 @@
+{
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "nursery": {
+        "all": true,
+        "useComponentExportOnlyModules": {
+          "level": "off"
+        },
+        "useConsistentCurlyBraces": {
+          "level": "off"
+        },
+        "noSecrets": {
+          "level": "off"
+        },
+        "noStaticElementInteractions": {
+          "level": "off"
+        },
+        "noNestedTernary": {
+          "level": "off"
+        },
+        "noImgElement": {
+          "level": "off"
+        },
+        "noProcessEnv": {
+          "level": "off"
+        },
+        "useImportRestrictions": {
+          "level": "off"
+        }
+      },
+      "suspicious": {
+        "useValidTypeof": {
+          "level": "off"
+        },
+        "noArrayIndexKey": {
+          "level": "off"
+        },
+        "noExplicitAny": {
+          "level": "off"
+        },
+        "noControlCharactersInRegex": {
+          "level": "off"
+        },
+        "noConfusingVoidType": {
+          "level": "off"
+        }
+      },
+      "correctness": {
+        "useExhaustiveDependencies": {
+          "level": "off"
+        }
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": {
+          "level": "off"
+        }
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": true,
+    "ignore": [],
+    "attributePosition": "auto",
+    "lineWidth": 80,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf"
+  }
+}
