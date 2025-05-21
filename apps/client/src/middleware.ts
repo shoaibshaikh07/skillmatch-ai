@@ -1,64 +1,70 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { api } from "./lib/utils";
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   const cookie = request.headers.get("cookie") || "";
   const API_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`;
 
-  const response = await api.get("/auth/get-session", {
+  const response = await fetch(`${API_URL}/auth/get-session`, {
     headers: {
       Cookie: cookie,
     },
   });
+  const responseData = await response.json();
 
-  // Only check onboarding status if user is authenticated
-  let isOnboardingCompleted = false;
-  if (response.data) {
+  // For auth pages, allow access if not authenticated
+  if (request.nextUrl.pathname.startsWith("/auth")) {
+    if (!responseData) {
+      return NextResponse.next();
+    }
+    // If authenticated, check onboarding status
     try {
       const checkOnboardingStatus = await fetch(`${API_URL}/user/onboarding`, {
         headers: {
           Cookie: cookie,
         },
       });
-      const checkOnboardingStatusData = await checkOnboardingStatus.json();
-      isOnboardingCompleted =
-        checkOnboardingStatusData.success &&
-        checkOnboardingStatusData.completed;
+      const { completed } = await checkOnboardingStatus.json();
+      return completed
+        ? NextResponse.redirect(new URL("/jobs", request.url))
+        : NextResponse.redirect(new URL("/onboarding", request.url));
     } catch (error) {
       console.error("Error checking onboarding status:", error);
-      // If there's an error checking onboarding status, assume it's not completed
-      isOnboardingCompleted = false;
-    }
-  }
-
-  // Handle auth path
-  if (request.nextUrl.pathname.startsWith("/auth")) {
-    if (response.data) {
-      // Only redirect if user is authenticated
-      if (isOnboardingCompleted) {
-        return NextResponse.redirect(new URL("/jobs", request.url));
-      }
       return NextResponse.redirect(new URL("/onboarding", request.url));
     }
-    // If not authenticated, allow access to auth pages
-    return NextResponse.next();
   }
 
-  // Handle onboarding path
-  if (request.nextUrl.pathname.startsWith("/onboarding")) {
-    if (isOnboardingCompleted) {
-      return NextResponse.redirect(new URL("/jobs", request.url));
-    }
-    return NextResponse.next();
+  // For onboarding and jobs pages, require authentication
+  if (!responseData) {
+    return NextResponse.redirect(new URL("/auth", request.url));
   }
 
-  // Handle jobs path
-  if (request.nextUrl.pathname.startsWith("/jobs")) {
-    if (!isOnboardingCompleted) {
-      return NextResponse.redirect(new URL("/onboarding", request.url));
+  // Check onboarding status for authenticated users
+  try {
+    const checkOnboardingStatus = await fetch(`${API_URL}/user/onboarding`, {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+    const { completed } = await checkOnboardingStatus.json();
+
+    // Handle onboarding path
+    if (request.nextUrl.pathname.startsWith("/onboarding")) {
+      return completed
+        ? NextResponse.redirect(new URL("/jobs", request.url))
+        : NextResponse.next();
     }
-    return NextResponse.next();
+
+    // Handle jobs path
+    if (request.nextUrl.pathname.startsWith("/jobs")) {
+      return completed
+        ? NextResponse.next()
+        : NextResponse.redirect(new URL("/onboarding", request.url));
+    }
+  } catch (error) {
+    console.error("Error checking onboarding status:", error);
+    // On error, redirect to onboarding to be safe
+    return NextResponse.redirect(new URL("/onboarding", request.url));
   }
 
   return NextResponse.next();
