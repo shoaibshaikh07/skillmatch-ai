@@ -16,10 +16,11 @@ export const auth = betterAuth({
   advanced: {
     cookiePrefix: "skillmatch",
     cookieOptions: {
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       domain: process.env.COOKIE_DOMAIN,
       path: "/",
+      httpOnly: true,
     },
   },
   secret: process.env.BETTER_AUTH_SECRET,

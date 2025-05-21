@@ -8,52 +8,61 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   }
 
   const cookie = request.headers.get("cookie") || "";
+  console.log("Middleware - Cookie header:", cookie); // Debug log
 
-  const response = await api.get("/auth/get-session", {
-    headers: {
-      Cookie: cookie,
-    },
-  });
+  try {
+    const response = await api.get("/auth/get-session", {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+    console.log("Middleware - Session response:", response.data); // Debug log
 
-  if (!response.data) {
-    return NextResponse.redirect(new URL("/auth", request.url));
-  }
-
-  // Check onboarding status once
-  const checkOnboardingStatus = await api.get("/user/onboarding", {
-    headers: {
-      Cookie: cookie,
-    },
-  });
-
-  const isOnboardingCompleted =
-    checkOnboardingStatus.data.success && checkOnboardingStatus.data.completed;
-
-  // Handle auth path
-  if (request.nextUrl.pathname.startsWith("/auth")) {
-    if (isOnboardingCompleted) {
-      return NextResponse.redirect(new URL("/jobs", request.url));
+    if (!response.data) {
+      console.log("Middleware - No session data, redirecting to auth"); // Debug log
+      return NextResponse.redirect(new URL("/auth", request.url));
     }
-    return NextResponse.redirect(new URL("/onboarding", request.url));
-  }
 
-  // Handle onboarding path
-  if (request.nextUrl.pathname.startsWith("/onboarding")) {
-    if (isOnboardingCompleted) {
-      return NextResponse.redirect(new URL("/jobs", request.url));
-    }
-    return NextResponse.next();
-  }
+    // Check onboarding status once
+    const checkOnboardingStatus = await api.get("/user/onboarding", {
+      headers: {
+        Cookie: cookie,
+      },
+    });
 
-  // Handle jobs path
-  if (request.nextUrl.pathname.startsWith("/jobs")) {
-    if (!isOnboardingCompleted) {
+    const isOnboardingCompleted =
+      checkOnboardingStatus.data.success &&
+      checkOnboardingStatus.data.completed;
+
+    // Handle auth path
+    if (request.nextUrl.pathname.startsWith("/auth")) {
+      if (isOnboardingCompleted) {
+        return NextResponse.redirect(new URL("/jobs", request.url));
+      }
       return NextResponse.redirect(new URL("/onboarding", request.url));
     }
-    return NextResponse.next();
-  }
 
-  return NextResponse.next();
+    // Handle onboarding path
+    if (request.nextUrl.pathname.startsWith("/onboarding")) {
+      if (isOnboardingCompleted) {
+        return NextResponse.redirect(new URL("/jobs", request.url));
+      }
+      return NextResponse.next();
+    }
+
+    // Handle jobs path
+    if (request.nextUrl.pathname.startsWith("/jobs")) {
+      if (!isOnboardingCompleted) {
+        return NextResponse.redirect(new URL("/onboarding", request.url));
+      }
+      return NextResponse.next();
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    console.error("Middleware - Error:", error);
+    return NextResponse.redirect(new URL("/auth", request.url));
+  }
 }
 
 // See "Matching Paths" below to learn more
