@@ -13,21 +13,20 @@ export const auth = betterAuth({
     autoSignIn: true,
     requireEmailVerification: false,
   },
+  baseURL: "http://localhost:3001",
+  trustedOrigins: [process.env.CLIENT_BASE_URL as string],
+  secret: process.env.BETTER_AUTH_SECRET,
   advanced: {
     cookiePrefix: "skillmatch",
     cookieOptions: {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      domain: process.env.COOKIE_DOMAIN,
       path: "/",
       httpOnly: true,
     },
   },
-  secret: process.env.BETTER_AUTH_SECRET,
-  trustedOrigins: [process.env.CLIENT_BASE_URL as string],
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
   },
-  baseURL: process.env.CLIENT_BASE_URL,
   plugins: [admin()],
 });
