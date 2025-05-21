@@ -44,33 +44,37 @@ SkillMatch AI is an AI-Powered Job Match Platform that helps find jobs based on 
 
 - Node.js >= 18
 - Bun >= 1.2.1
+- Docker
 - Git
 
 ### Setup Instructions
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/shoaibshaikh07/skillmatch-ai.git
    cd skillmatch-ai
    ```
 
-2. Install dependencies:
-
+2. Start the server using Docker Compose:
    ```bash
-   npm install
-   # OR
-   bun install
+   docker-compose up
+   ```
+   This will start the server app at http://localhost:3001
+#####
+3. In a separate terminal, start the client app:
+   ```bash
+   cd apps/client
+   bun install  # or npm install
+   bun run dev  # or npm run dev
+   ```
+   This will start the client app at http://localhost:3000
+#####
+4. To stop the server:
+   ```bash
+   docker-compose down
    ```
 
-3. Start the development environment:
-   ```bash
-   npm run dev
-   # OR
-   bun run dev
-   ```
-
-This will start both the client and server applications in development mode.
+Note: The client app runs locally for better development experience with hot reloading, while the server runs in Docker for consistent environment management.
 
 ## 🔒 Environment Variables
 
@@ -549,6 +553,20 @@ skillmatch-ai/
 2. Applications are developed in the `apps` directory
 3. Use `npm run dev` or `bun run dev` for local development
 4. Changes in shared packages are automatically reflected in applications
+
+## Deployment
+
+### Server
+We will deploy our server to [Render](https://render.com) using [Docker](https://www.docker.com), follow the steps below:
+
+1. Create a Render account (if you don't have one) and connect your GitHub account.
+2. Create new `Web Service` and select `Docker` as the Language.
+3. Enter `apps/server` as the `Root Directory`.
+4. Set all the environment variables in the `Environment Variables` section.
+5. Click `Deploy Web Service`.
+6. Once the deployment is complete, you can access your deployed server at `https://<your-app-name>.onrender.com`.
+
+
 
 ## 📝 License
 

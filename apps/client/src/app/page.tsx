@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Home(): React.JSX.Element {
   return (
-    <section className="mx-auto flex max-w-lg flex-col gap-4 p-4 md:max-w-4xl">
+    <section className="mx-auto flex max-w-lg flex-col gap-4 p-4 md:max-w-5xl">
       <h1 className="font-medium text-2xl">
         <span>
           AI will <span className="font-bold">take</span> your job
