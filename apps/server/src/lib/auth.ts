@@ -16,6 +16,11 @@ export const auth = betterAuth({
   advanced: {
     cookiePrefix: "skillmatch",
   },
+  secret: process.env.BETTER_AUTH_SECRET,
+  trustedOrigins: [process.env.CLIENT_BASE_URL as string],
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+  },
   baseURL: process.env.CLIENT_BASE_URL,
   plugins: [admin()],
 });
